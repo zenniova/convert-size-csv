@@ -1,0 +1,6 @@
+flask==2.0.1
+pandas==1.4.4
+pyarrow==8.0.0
+openpyxl==3.0.9
+zstandard==0.17.0
+werkzeug==2.0.1 
