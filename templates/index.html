@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konverter File</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Konverter File</h1>
+        
+        <div class="converter-section">
+            <h2>CSV/XLSX ke Parquet (Compressed)</h2>
+            <div class="drop-zone" id="dropZone1">
+                <p>Drag & drop file CSV/XLSX di sini atau klik untuk memilih file</p>
+                <input type="file" id="fileInput1" accept=".csv,.xlsx,.xls" hidden>
+            </div>
+            <div class="info">
+                <p>✨ Menggunakan kompresi ZSTD level 22 untuk ukuran file maksimal kecil</p>
+                <p>📊 Cocok untuk penyimpanan jangka panjang</p>
+                <p>⚠️ Proses mungkin membutuhkan waktu lebih lama</p>
+            </div>
+        </div>
+
+        <div class="converter-section">
+            <h2>Parquet ke CSV</h2>
+            <div class="drop-zone" id="dropZone2">
+                <p>Drag & drop file Parquet di sini atau klik untuk memilih file</p>
+                <input type="file" id="fileInput2" accept=".parquet" hidden>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html> 

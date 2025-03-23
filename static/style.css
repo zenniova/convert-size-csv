@@ -1,0 +1,58 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.converter-section {
+    margin-bottom: 30px;
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.drop-zone {
+    border: 2px dashed #6c757d;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    margin: 10px 0;
+    transition: all 0.3s ease;
+    background: white;
+    border-radius: 6px;
+}
+
+.drop-zone:hover {
+    background-color: #e9ecef;
+    border-color: #495057;
+}
+
+.drop-zone.dragover {
+    background-color: #e9ecef;
+    border-color: #495057;
+}
+
+.info {
+    margin-top: 15px;
+    padding: 10px;
+    background: #e7f5ff;
+    border-radius: 6px;
+    font-size: 0.9em;
+}
+
+.info p {
+    margin: 5px 0;
+    color: #495057;
+}
+
+h1 {
+    color: #212529;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h2 {
+    color: #343a40;
+    margin-bottom: 15px;
+} 
