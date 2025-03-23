@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function setupDropZone(dropZoneId, fileInputId, endpoint) {
     const dropZone = document.getElementById(dropZoneId);
     const fileInput = document.getElementById(fileInputId);
+    const progressModal = new bootstrap.Modal(document.getElementById('progressModal'));
 
     dropZone.addEventListener('click', () => fileInput.click());
 
@@ -23,20 +24,24 @@ function setupDropZone(dropZoneId, fileInputId, endpoint) {
         dropZone.classList.remove('dragover');
         const files = e.dataTransfer.files;
         if (files.length) {
-            handleFile(files[0], endpoint, dropZone);
+            handleFile(files[0], endpoint, dropZone, progressModal);
         }
     });
 
     fileInput.addEventListener('change', (e) => {
         if (e.target.files.length) {
-            handleFile(e.target.files[0], endpoint, dropZone);
+            handleFile(e.target.files[0], endpoint, dropZone, progressModal);
         }
     });
 }
 
-function handleFile(file, endpoint, dropZone) {
-    const originalText = dropZone.innerHTML;
-    dropZone.innerHTML = '<p>Memproses file... (Mohon tunggu, proses kompresi membutuhkan waktu)</p>';
+function handleFile(file, endpoint, dropZone, progressModal) {
+    const originalContent = dropZone.innerHTML;
+    const progressText = document.getElementById('progressText');
+    
+    // Show progress modal
+    progressModal.show();
+    progressText.textContent = `Memproses ${file.name}...`;
 
     const formData = new FormData();
     formData.append('file', file);
@@ -59,16 +64,23 @@ function handleFile(file, endpoint, dropZone) {
         a.href = url;
         a.download = endpoint.includes('to-feather') ? 
             file.name + '.parquet' : 
-            file.name + '.csv';
+            file.name.replace('.parquet', '.csv');
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
         a.remove();
-        dropZone.innerHTML = originalText;
+        
+        // Show success message
+        progressText.textContent = 'Konversi berhasil! Mengunduh file...';
+        setTimeout(() => {
+            progressModal.hide();
+            dropZone.innerHTML = originalContent;
+        }, 1500);
     })
     .catch(error => {
+        progressModal.hide();
         alert('Error: ' + error.message);
-        dropZone.innerHTML = originalText;
+        dropZone.innerHTML = originalContent;
     });
 }
 

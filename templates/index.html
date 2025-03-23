@@ -3,34 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Konverter File</title>
+    <title>File Converter Pro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Konverter File</h1>
-        
-        <div class="converter-section">
-            <h2>CSV/XLSX ke Parquet (Compressed)</h2>
-            <div class="drop-zone" id="dropZone1">
-                <p>Drag & drop file CSV/XLSX di sini atau klik untuk memilih file</p>
-                <input type="file" id="fileInput1" accept=".csv,.xlsx,.xls" hidden>
-            </div>
-            <div class="info">
-                <p>✨ Menggunakan kompresi ZSTD level 22 untuk ukuran file maksimal kecil</p>
-                <p>📊 Cocok untuk penyimpanan jangka panjang</p>
-                <p>⚠️ Proses mungkin membutuhkan waktu lebih lama</p>
-            </div>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-files"></i> File Converter Pro
+            </a>
         </div>
+    </nav>
 
-        <div class="converter-section">
-            <h2>Parquet ke CSV</h2>
-            <div class="drop-zone" id="dropZone2">
-                <p>Drag & drop file Parquet di sini atau klik untuk memilih file</p>
-                <input type="file" id="fileInput2" accept=".parquet" hidden>
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card main-card">
+                    <div class="card-body">
+                        <h1 class="text-center mb-4">File Converter Pro</h1>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="converter-section">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h2 class="card-title">
+                                                <i class="bi bi-file-earmark-arrow-down"></i>
+                                                CSV/XLSX ke Parquet
+                                            </h2>
+                                            <div class="drop-zone" id="dropZone1">
+                                                <div class="drop-zone-content">
+                                                    <i class="bi bi-cloud-upload"></i>
+                                                    <p>Drag & drop file CSV/XLSX di sini</p>
+                                                    <span class="browse-text">atau klik untuk memilih file</span>
+                                                </div>
+                                                <input type="file" id="fileInput1" accept=".csv,.xlsx,.xls" hidden>
+                                            </div>
+                                            <div class="info mt-3">
+                                                <div class="alert alert-info">
+                                                    <h5><i class="bi bi-info-circle"></i> Informasi</h5>
+                                                    <ul class="mb-0">
+                                                        <li>Kompresi ZSTD level maksimal</li>
+                                                        <li>Ukuran file lebih kecil</li>
+                                                        <li>Data tetap utuh</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="converter-section">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h2 class="card-title">
+                                                <i class="bi bi-file-earmark-arrow-up"></i>
+                                                Parquet ke CSV
+                                            </h2>
+                                            <div class="drop-zone" id="dropZone2">
+                                                <div class="drop-zone-content">
+                                                    <i class="bi bi-cloud-upload"></i>
+                                                    <p>Drag & drop file Parquet di sini</p>
+                                                    <span class="browse-text">atau klik untuk memilih file</span>
+                                                </div>
+                                                <input type="file" id="fileInput2" accept=".parquet" hidden>
+                                            </div>
+                                            <div class="info mt-3">
+                                                <div class="alert alert-info">
+                                                    <h5><i class="bi bi-info-circle"></i> Informasi</h5>
+                                                    <ul class="mb-0">
+                                                        <li>Konversi kembali ke CSV</li>
+                                                        <li>Format data terjaga</li>
+                                                        <li>Proses cepat</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Modal -->
+                <div class="modal fade" id="progressModal" data-bs-backdrop="static" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-body text-center p-4">
+                                <div class="spinner-border text-primary mb-3" role="status"></div>
+                                <h5 class="modal-title">Memproses File</h5>
+                                <p class="mb-0" id="progressText">Mohon tunggu sebentar...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
+    <footer class="footer mt-5">
+        <div class="container text-center">
+            <p class="text-muted mb-1">© 2024 File Converter Pro. All rights reserved.</p>
+            <p class="text-muted small">
+                <i class="bi bi-code-slash"></i> Developed by 
+                <a href="https://github.com/zenniova" class="text-decoration-none" target="_blank">Zenni</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html> 
