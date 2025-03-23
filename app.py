@@ -48,21 +48,46 @@ def convert_to_feather():
     file.save(filepath)
 
     try:
-        # Baca file
+        # Baca file dengan pengaturan yang lebih ketat
         if filename.endswith('.csv'):
-            df = pd.read_csv(filepath)
+            df = pd.read_csv(
+                filepath,
+                low_memory=False,  # Mencegah inferensi tipe data yang salah
+                dtype='object',    # Membaca semua kolom sebagai string dulu
+                na_values=['', '#N/A', '#N/A N/A', '#NA', '-1.#IND', '-1.#QNAN', 
+                          '-NaN', '-nan', '1.#IND', '1.#QNAN', '<NA>', 'N/A', 
+                          'NA', 'NULL', 'NaN', 'n/a', 'nan', 'null']  # Menangani berbagai format NA
+            )
         elif filename.endswith(('.xlsx', '.xls')):
-            df = pd.read_excel(filepath)
+            df = pd.read_excel(
+                filepath,
+                dtype='object',    # Membaca semua kolom sebagai string dulu
+                na_values=['', '#N/A', '#N/A N/A', '#NA', '-1.#IND', '-1.#QNAN',
+                          '-NaN', '-nan', '1.#IND', '1.#QNAN', '<NA>', 'N/A',
+                          'NA', 'NULL', 'NaN', 'n/a', 'nan', 'null']
+            )
         else:
             remove_file(filepath)
             return 'Format file tidak didukung', 400
 
+        # Konversi tipe data yang sesuai setelah membaca
+        for column in df.columns:
+            # Coba konversi ke numeric jika memungkinkan
+            try:
+                if df[column].dtype == 'object':
+                    numeric_series = pd.to_numeric(df[column], errors='raise')
+                    df[column] = numeric_series
+            except:
+                # Jika gagal konversi numeric, biarkan sebagai string
+                pass
+
         output_filename = filename + '.parquet'
         output_path = os.path.join(app.config['UPLOAD_FOLDER'], output_filename)
         
-        # Simpan ke parquet
+        # Simpan ke parquet dengan pengaturan yang lebih aman
         df.to_parquet(
             output_path,
+            engine='pyarrow',     # Menggunakan engine pyarrow yang lebih stabil
             compression='zstd',
             compression_level=22,
             row_group_size=500000,
@@ -107,16 +132,21 @@ def convert_from_feather():
     file.save(filepath)
 
     try:
-        # Baca parquet
-        df = pd.read_parquet(filepath)
+        # Baca parquet dengan pengaturan yang lebih aman
+        df = pd.read_parquet(filepath, engine='pyarrow')
         
-        output_filename = filename + '.csv'
+        output_filename = filename.replace('.parquet', '') + '.csv'
         output_path = os.path.join(app.config['UPLOAD_FOLDER'], output_filename)
         
-        # Simpan ke CSV
+        # Simpan ke CSV dengan pengaturan yang lebih aman
         df.to_csv(
             output_path,
-            index=False
+            index=False,
+            date_format='%Y-%m-%d %H:%M:%S',  # Format tanggal yang konsisten
+            float_format='%.10g',             # Presisi floating point yang lebih tinggi
+            encoding='utf-8',                 # Encoding yang eksplisit
+            na_rep='',                        # Representasi NA yang konsisten
+            quoting=1                         # Mengutip semua field non-numerik
         )
         
         remove_file(filepath)
